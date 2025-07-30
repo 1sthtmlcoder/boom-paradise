@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BoomTown (Pages Client)</title>
+  <style>
+    html, body { margin:0; height:100%; background:#0f1220; color:#fff; font-family: system-ui, -apple-system, Segoe UI, Roboto; }
+    #ui { position:absolute; top:10px; left:10px; right:10px; display:flex; gap:8px; align-items:center; z-index:10; }
+    .btn { background:#2b3245; border:none; padding:8px 10px; border-radius:8px; color:#fff; cursor:pointer; }
+    #status { font-size:14px; opacity:0.8; }
+    #question { position:absolute; top:10px; right:10px; width:36px; height:36px; border-radius:50%; background:#2b3245; display:flex; align-items:center; justify-content:center; cursor:pointer; user-select:none; z-index:10; }
+    #help { position:absolute; top:56px; right:10px; width:320px; background:#121826; border:1px solid #2b3245; border-radius:8px; padding:12px; display:none; z-index:10; }
+    #chat { position:absolute; bottom:10px; left:10px; width:340px; background:#121826; border:1px solid #2b3245; border-radius:8px; z-index:10; }
+    #chatLog { height:200px; overflow-y:auto; padding:8px; font-size:14px; }
+    #chatForm { display:flex; border-top:1px solid #2b3245; }
+    #chatInput { flex:1; padding:8px; background:#0f1420; border:none; color:#fff; }
+    #storePanel { position:absolute; top:60px; left:50%; transform:translateX(-50%); width:640px; max-width:95vw; height:60vh; background:#121826; border:1px solid #2b3245; border-radius:12px; display:none; flex-direction:column; z-index:10; }
+    #storeItems { flex:1; overflow:auto; display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap:10px; padding:12px; }
+    .card { background:#0f1420; border:1px solid #2b3245; border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px; }
+    #overlayDown { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:linear-gradient(180deg,#0f1220,#151a2c); z-index:1000; }
+    #overlayDown .box { text-align:center; background:#0f1420; border:1px solid #29314a; border-radius:16px; padding:24px; width:min(90vw,480px); box-shadow:0 10px 40px rgba(0,0,0,0.4); }
+    #mobileStick { position:absolute; bottom:100px; left:20px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); display:none; z-index:5; touch-action:none; }
+    #stickNub { position:absolute; width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.15); left:50%; top:50%; transform:translate(-50%,-50%); }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div id="status">Not connected</div>
+    <div style="display:flex; gap:8px; margin-left:12px;">
+      <button id="micBtn" class="btn">Start Voice</button>
+      <button id="muteBtn" class="btn" disabled>Mute</button>
+    </div>
+    <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+      <span id="bc">BC: 0</span>
+      <button id="equipBtn" class="btn">Equip Random Cosmetic</button>
+    </div>
+  </div>
+
+  <div id="question">?</div>
+  <div id="help">
+    <h3>Controls</h3>
+    <ul>
+      <li>Move: WASD / Arrow keys (PC) or the joystick (Android/touch)</li>
+      <li>Dances: 1 (wave), 2 (shuffle), 3 (spin), 4 (point)</li>
+      <li>Open Store: Walk into the shop</li>
+      <li>Chat: Type in the box</li>
+      <li>Voice: Click "Start Voice"</li>
+    </ul>
+  </div>
+
+  <div id="storePanel">
+    <div style="display:flex; align-items:center; justify-content:space-between; padding:10px;">
+      <div><strong>Store</strong> — Buy cosmetics & dances with BC</div>
+      <button id="closeStore" class="btn">Close</button>
+    </div>
+    <div id="storeItems"></div>
+  </div>
+
+  <div id="chat">
+    <div id="chatLog"></div>
+    <form id="chatForm">
+      <input id="chatInput" autocomplete="off" placeholder="Type to chat..." />
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+
+  <div id="mobileStick"><div id="stickNub"></div></div>
+
+  <div id="overlayDown">
+    <div class="box">
+      <h2>Servers are down :(</h2>
+      <p>Please try again later.</p>
+      <small id="downDetail"></small>
+    </div>
+  </div>
+
+  <audio id="voice" autoplay playsinline></audio>
+
+  <!-- Phaser -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.0/dist/phaser.min.js"></script>
+  <!-- Photon SDK: place Photon-Javascript_SDK.min.js into /vendor and uncomment below -->
+  <!-- <script src="vendor/Photon-Javascript_SDK.min.js"></script> -->
+
+  <script type="module" src="./config_obfuscated.js"></script>
+  <script type="module" src="./chat_filter.js"></script>
+  <script type="module" src="./playfab.js"></script>
+  <script type="module" src="./photonClient.js"></script>
+  <script type="module" src="./voice.js"></script>
+  <script type="module" src="./game.js"></script>
+  <script>
+    // Quick testing tip: set API base override from console:
+    // localStorage.setItem('API_BASE', 'https://your-server.onrender.com');
+  </script>
+</body>
+</html>
